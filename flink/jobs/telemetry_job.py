@@ -7,7 +7,6 @@ from pyflink.datastream import StreamExecutionEnvironment
 from pyflink.datastream.window import TumblingEventTimeWindows
 from pyflink.datastream.connectors.kafka import KafkaSource, KafkaSink, KafkaRecordSerializationSchema
 
-
 env = StreamExecutionEnvironment.get_execution_environment()
 env.set_parallelism(1)
 
@@ -20,11 +19,9 @@ source = (
     .build()
 )
 
-
 def parse_event(value):
     d = json.loads(value)
     return d["car_id"], float(d["speed"]), int(d["rpm"]), int(d["event_time"])
-
 
 stream = (
     env.from_source(

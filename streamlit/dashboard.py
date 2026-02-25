@@ -7,42 +7,30 @@ import streamlit as st
 import plotly.express as px
 from kafka import KafkaConsumer
 
-# -------------------------------------------------
-# Streamlit setup
-# -------------------------------------------------
 st.set_page_config(
-    page_title="Motorsports proj",
+    page_title="Motorsports project",
     layout="wide"
 )
 
-st.title("Flink wala dashboard of cute cars yum")
-st.caption("Source: Kafka topic telemetry_analytics ")
+st.title("Motorsports dashboard")
+st.caption("Current data source: Kafka topic: telemetry_analytics")
 
-# -------------------------------------------------
-# Kafka Consumer (CRITICAL SETTINGS)
-# -------------------------------------------------
 @st.cache_resource
 def get_consumer():
     return KafkaConsumer(
         "telemetry_analytics",
-        bootstrap_servers="kafka:29092",   # Docker internal
+        bootstrap_servers="kafka:29092", 
         value_deserializer=lambda v: json.loads(v.decode("utf-8")),
-        auto_offset_reset="earliest",       # 🔑 replay existing data
+        auto_offset_reset="earliest",       
         enable_auto_commit=True,
-        group_id="streamlit-ui-v3"          # 🔑 NEW group
+        group_id="streamlit-ui-v3"        
     )
 
 consumer = get_consumer()
 
-# -------------------------------------------------
-# Buffer (keeps last N records)
-# -------------------------------------------------
 if "buffer" not in st.session_state:
     st.session_state.buffer = deque(maxlen=200)
 
-# -------------------------------------------------
-# Poll Kafka
-# -------------------------------------------------
 records = consumer.poll(timeout_ms=1000)
 
 message_count = sum(len(v) for v in records.values())
@@ -54,9 +42,6 @@ for _, messages in records.items():
         event["ui_time"] = pd.Timestamp.utcnow()
         st.session_state.buffer.append(event)
 
-# -------------------------------------------------
-# Render dashboard
-# -------------------------------------------------
 if st.session_state.buffer:
     df = pd.DataFrame(st.session_state.buffer)
 
@@ -76,6 +61,7 @@ if st.session_state.buffer:
         use_container_width=True
     )
 
+
     st.plotly_chart(
         px.line(
             df,
@@ -90,10 +76,7 @@ if st.session_state.buffer:
     st.dataframe(df.tail(10), use_container_width=True)
 
 else:
-    st.info("Waiting for data...")
+    st.info("Waiting for data ")
 
-# -------------------------------------------------
-# Auto refresh
-# -------------------------------------------------
 time.sleep(2)
 st.rerun()

@@ -8,7 +8,7 @@ producer = KafkaProducer(
 
 while True:
     producer.send("telemetry_raw", {
-        "car_id": random.choice(["44", "16", "55"]),
+        "car_id": random.choice(["44", "01", "16"]),
         "speed": random.uniform(250, 340),
         "rpm": random.randint(9000, 12000),
         "event_time": int(time.time() * 1000)
