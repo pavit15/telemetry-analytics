@@ -27,7 +27,7 @@ Streamlit Dashboard (Live Visualization)
 
 - **Streamlit + Plotly :** Used to build an interactive real-time dashboard for visualizing processed telemetry analytics.
 
-- **Python 3.10: ** Used as the primary programming language for producer, processing logic, and dashboard development.
+- **Python 3.10** : Used as the primary programming language for producer, processing logic, and dashboard development.
 
 # How To Run The Project
 
@@ -44,6 +44,7 @@ docker compose ps
 ```
 
 It should show an output like this:
+![Docker Output](images/docker%20compose%20command%20output.jpg)
 
 2️. Create Kafka Topics
 Make sure kafka is running as in the above picture
@@ -68,6 +69,7 @@ docker compose exec kafka \
 kafka-topics --bootstrap-server kafka:29092 --list
 ```
 Output should look like this:
+![Kafka Topics](images/Kafka%20topics%20list.jpg)
 
 3. Submit Flink Job
 ```
@@ -75,6 +77,7 @@ docker compose exec flink-jobmanager \
 flink run -d -py /opt/flink/jobs/telemetry_job.py
 ```
 Open Flink UI (Port 8081) to verify job is RUNNING.
+![Flink Job Running](images/Flink%20Job%20Running.jpg)
 
 4. Run the data producer
 
@@ -90,8 +93,9 @@ This simulates live telemetry data.
 Open Streamlit on port 8501.
 
 You should see analysis graphs such as: 
-
-At the bottom, the entire data can be downloaded in .csv format, as in output.csv
+![Dashboard](images/Dashboard.jpg)
+![Average RPM Plot](images/Avergae%20RPM%20Plot.png)
+At the bottom, the entire data can be downloaded in .csv format, as shown in outputdata.csv
 
 # Streaming Logic
 
@@ -131,7 +135,6 @@ Kafka	| 9092
 Zookeeper	| 2181
 Flink UI	| 8081
 Streamlit |	8501
-
    
 ## Note:
 
