@@ -4,18 +4,9 @@ Built a real-time streaming architecture using Kafka, Apache Flink, and Streamli
 
 This project simulates live car telemetry (speed, RPM) and performs windowed aggregation to compute real-time performance analytics.
 
-
 # Data Pipeline
 
-Telemetry Producer (Python)
-        ↓
-Kafka (telemetry_raw topic)
-        ↓
-Apache Flink (5-sec tumbling window aggregation)
-        ↓
-Kafka (telemetry_analytics topic)
-        ↓
-Streamlit Dashboard (Live Visualization)
+![Pipeline](images/architecture%20flowchart.png)
 
 # Tech Stack Used
 
@@ -46,7 +37,8 @@ docker compose ps
 It should show an output like this:
 ![Docker Output](images/docker%20compose%20command%20output.jpg)
 
-2️. Create Kafka Topics
+2️. Create Kafka source and sink topics
+
 Make sure kafka is running as in the above picture
 ```
 docker compose exec kafka \
